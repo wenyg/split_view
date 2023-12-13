@@ -261,6 +261,7 @@ Window getActiveWindow(Display *display) {
         return None;
     }
 }
+
 // 添加用于打印窗口信息的函数
 void printWindowInfo(Display *display, Window window) {
     XWindowAttributes windowAttributes;
@@ -275,7 +276,8 @@ void printWindowInfo(Display *display, Window window) {
     }
 }
 
-void getWindowGeometry(Display *display, Window window, unsigned int &x, unsigned int &y, unsigned int &width, unsigned int &height) {
+void getWindowGeometry(Display *display, Window window, unsigned int &x, unsigned int &y, unsigned int &width,
+                       unsigned int &height) {
     Atom real_type;
     int real_format;
     unsigned long nitems, bytes_after;
@@ -310,7 +312,7 @@ void getCurrentWindowInfo(Display *display, Window window, XWindowChanges *windo
 }
 
 void intercept(XPointer user_data, XRecordInterceptData *data) {
-    auto *ctrl_conn = (Display *) (user_data);
+    auto *ctrl_conn = (Display * )(user_data);
     XLockDisplay(ctrl_conn);
 
     if (data->category == XRecordFromServer) {
@@ -329,50 +331,21 @@ void intercept(XPointer user_data, XRecordInterceptData *data) {
 
         if (global_left_ctrl_pressed && global_left_alt_pressed && key_event == 2) {
             auto active_window = getActiveWindow(ctrl_conn);
-            if (key_code == 87 || key_code == 44) { // 小键盘 1 或者 j
+            if (key_code == 87 ) { // 小键盘 1
                 resizeAndMoveWindow(ctrl_conn, active_window, 0.3333, 1, 0, 0);
-                printf("Ctrl+Alt+Keypad 1\n");
-            }
-            else if (key_code == 88 || key_code == 45) { // 小键盘 2 或者 k
+            } else if (key_code == 88 ) { // 小键盘 2
                 resizeAndMoveWindow(ctrl_conn, active_window, 0.3333, 1, 0.3333, 0);
-                printf("Ctrl+Alt+Keypad 2\n");
-            }
-            else if (key_code == 89 || key_code == 46) { // 小键盘 3 或者 l
+            } else if (key_code == 89) { // 小键盘 3
                 resizeAndMoveWindow(ctrl_conn, active_window, 0.3333, 1, 0.6666, 0);
-                printf("Ctrl+Alt+Keypad 3\n");
-            }
-            else if (key_code == 83 || key_code == 30) { // 小键盘 4 或者 u
+            } else if (key_code == 83 ) { // 小键盘 4
                 resizeAndMoveWindow(ctrl_conn, active_window, 0.6666, 1, 0, 0);
-                printf("Ctrl+Alt+Keypad 4\n");
-            }
-            else if (key_code == 85 || key_code == 32) { // 小键盘 6 或者 o
-                resizeAndMoveWindow(ctrl_conn, getActiveWindow(ctrl_conn), float(2) / 3, 1, float(1) / 3, 0);
-            }
-            else if (key_code == 113) { // 左方向键
+            } else if (key_code == 85 ) { // 小键盘 6
+                resizeAndMoveWindow(ctrl_conn, getActiveWindow(ctrl_conn), 2.0 / 3, 1, 1.0 / 3, 0);
+            } else if (key_code == 113) { // 左方向键
                 resizeAndMoveWindow(ctrl_conn, active_window, 0.5, 1, 0, 0);
-                printf("Ctrl+Alt+Keypad 4\n");
-            }else if (key_code == 114) { // 右方向键
+            } else if (key_code == 114) { // 右方向键
                 resizeAndMoveWindow(ctrl_conn, active_window, 0.5, 1, 0.5, 0);
-                printf("Ctrl+Alt+Keypad 4\n");
-            }
-
-            else if (key_code == 58) { // M
-                resizeAndMoveWindow(ctrl_conn, active_window, 0.5, 0.5, 0, 0);
-                printf("Ctrl+Alt+Keypad 4\n");
-            }
-            else if (key_code == 59) { // <
-                resizeAndMoveWindow(ctrl_conn, active_window, 0.5, 0.5, 0.5, 0);
-                printf("Ctrl+Alt+Keypad 4\n");
-            }
-            else if (key_code == 60) { // >
-                resizeAndMoveWindow(ctrl_conn, active_window, 0.5, 0.5, 0, 0.5);
-                printf("Ctrl+Alt+Keypad 4\n");
-            }
-            else if (key_code == 61) { // ?
-                resizeAndMoveWindow(ctrl_conn, active_window, 0.5, 0.5, 0.5, 0.5);
-                printf("Ctrl+Alt+Keypad 4\n");
-            }
-            else if (key_code == 36) { // Enter
+            } else if (key_code == 36) { // Enter
                 static bool is_full_screen = false;
                 static XWindowChanges store_changes;
                 if (is_full_screen) {
@@ -390,7 +363,7 @@ void intercept(XPointer user_data, XRecordInterceptData *data) {
         }
 
 
-        if(key_event == 2){
+        if (key_event == 2) {
             fprintf(stdout, "Intercepted key event %d, key code %d\n", key_event, key_code);
         }
     }
