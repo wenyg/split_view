@@ -345,7 +345,7 @@ void intercept(XPointer user_data, XRecordInterceptData *data) {
                 resizeAndMoveWindow(ctrl_conn, active_window, 0.5, 1, 0, 0);
             } else if (key_code == 114) { // 右方向键
                 resizeAndMoveWindow(ctrl_conn, active_window, 0.5, 1, 0.5, 0);
-            } else if (key_code == 36) { // Enter
+            }else if (key_code == 36) { // Enter
                 static bool is_full_screen = false;
                 static XWindowChanges store_changes;
                 if (is_full_screen) {
@@ -362,9 +362,18 @@ void intercept(XPointer user_data, XRecordInterceptData *data) {
             }
         }
 
+        if (global_left_ctrl_pressed && global_left_shift_pressed && key_event == 2) {
+            if (key_code == 40) {   // D 
+                fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'auto'\n");
+                system("/usr/bin/gsettings set org.gnome.system.proxy mode 'auto'");
+            }  else if (key_code == 42) { // G 
+                fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'\n");
+                system("/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'");
+            }  
+        }
 
         if (key_event == 2) {
-            fprintf(stdout, "Intercepted key event %d, key code %d\n", key_event, key_code);
+            fprintf(stdout, "Intercepted key code %d\n", key_code);
         }
     }
 
