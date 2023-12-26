@@ -372,12 +372,12 @@ void intercept(XPointer user_data, XRecordInterceptData *data) {
                 static int current_mode = 0;
                 if (current_mode == 0) {
                     fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'none'\n");
-                    // system("/usr/bin/gsettings set org.gnome.system.proxy mode 'none'");
+                    system("/usr/bin/gsettings set org.gnome.system.proxy mode 'none'");
                     dialog.show("关闭代理");
                     current_mode = 1;
                 } else if (current_mode == 1) {
                     fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'\n");
-                    // system("/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'");
+                    system("/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'");
                     dialog.show("开启代理");
                     current_mode = 0;
                 }
