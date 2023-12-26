@@ -16,7 +16,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <climits>  // Add this line to include the necessary header
-
+#include "dialog.hpp"
 typedef struct _XCape_t {
     Display *data_conn;
     Display *ctrl_conn;
@@ -363,13 +363,30 @@ void intercept(XPointer user_data, XRecordInterceptData *data) {
         }
 
         if (global_left_ctrl_pressed && global_left_shift_pressed && key_event == 2) {
-            if (key_code == 40) {   // D 
+            
+            static int current_mode = 0;
+            
+            if (key_code == 53) {   // Auto 自动
                 fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'auto'\n");
                 system("/usr/bin/gsettings set org.gnome.system.proxy mode 'auto'");
-            }  else if (key_code == 42) { // G 
-                fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'\n");
-                system("/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'");
-            }  
+                static int current_mode = 0;
+                if (current_mode == 0) {
+                    fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'auto'\n");
+                    system("/usr/bin/gsettings set org.gnome.system.proxy mode 'auto'");
+                    Dialog::show("切换到 Auto 模式");
+                    current_mode = 1;
+                } else if (current_mode == 1) {
+                    fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'\n");
+                    system("/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'");
+                    Dialog::show("切换到 Manual 模式");
+                    current_mode = 0;
+                }
+            }
+            if (key_code == 57) {   // Auto 自动
+                fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'none'\n");
+                system("/usr/bin/gsettings set org.gnome.system.proxy mode 'none'");
+                Dialog::show("关闭代理");
+            }
         }
 
         if (key_event == 2) {

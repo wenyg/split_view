@@ -10,7 +10,7 @@ Ubuntu 分屏软件，支持快捷键， 1/2, 1/3, 2/3 分屏,
 安装依赖
 
 ```shell
-sudo apt-get install git gcc make pkg-config libx11-dev libxtst-dev libxi-dev
+sudo apt-get install git gcc make pkg-config libx11-dev libxtst-dev libxi-dev libgtk-3-dev
 ```
 编译
 
