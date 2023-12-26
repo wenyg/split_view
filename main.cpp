@@ -316,7 +316,7 @@ void getCurrentWindowInfo(Display *display, Window window, XWindowChanges *windo
 void intercept(XPointer user_data, XRecordInterceptData *data) {
     auto *ctrl_conn = (Display * )(user_data);
     XLockDisplay(ctrl_conn);
-
+    static Dialog dialog;
     if (data->category == XRecordFromServer) {
         int key_event = data->data[0];
         KeyCode key_code = data->data[1];
@@ -366,7 +366,6 @@ void intercept(XPointer user_data, XRecordInterceptData *data) {
 
         if (global_left_ctrl_pressed && global_left_shift_pressed && key_event == 2) {
             
-            static Dialog dialog;
             static int current_mode = 0;
             
             if (key_code == 65) {
@@ -374,12 +373,12 @@ void intercept(XPointer user_data, XRecordInterceptData *data) {
                 if (current_mode == 0) {
                     fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'none'\n");
                     // system("/usr/bin/gsettings set org.gnome.system.proxy mode 'none'");
-                    Dialog::show("关闭代理");
+                    dialog.show("关闭代理");
                     current_mode = 1;
                 } else if (current_mode == 1) {
                     fprintf(stdout, "/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'\n");
                     // system("/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'");
-                    Dialog::show("开启代理");
+                    dialog.show("开启代理");
                     current_mode = 0;
                 }
             }
